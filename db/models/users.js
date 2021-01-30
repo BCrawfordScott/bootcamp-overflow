@@ -14,10 +14,24 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   users.init({
-    email: DataTypes.STRING(100),
-    username: DataTypes.STRING(100),
-    hashedPassword: DataTypes.STRING,
-    role: DataTypes.ENUM('student', 'instructor')
+    email: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
+      unique: true,
+    },
+    username: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
+      unique: true
+    },
+    hashedPassword: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    role: {
+      type: DataTypes.ENUM('student', 'instructor'),
+      allowNull: false,
+    }
   }, {
     sequelize,
     modelName: 'Users',
