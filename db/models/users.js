@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   };
-  users.init({
+  Users.init({
     email: {
       type: DataTypes.STRING(100),
       allowNull: false,

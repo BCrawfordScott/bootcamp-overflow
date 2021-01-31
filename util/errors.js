@@ -1,13 +1,15 @@
 const asyncHandler = (handler) => (req, res, next) => handler(req, res).catch(next);
 
+// App middleware
+
 const unhandled = (req, res, next) => {
     const err = new Error("The rdquested page could not be found");
     err.status = 404;
     next(err);
 }
 
-const logErrors = (err, reg, res, session) => {
-    if(process.env.NODE_ENV === production) {
+const logErrors = (err, reg, res, next) => {
+    if(process.env.NODE_ENV === 'production') {
         //TODO log to db
     } else {
         console.error(err);
@@ -16,7 +18,7 @@ const logErrors = (err, reg, res, session) => {
     next(err);
 }
 
-const notFound = (err, req, res, session) => {
+const notFound = (err, req, res, next) => {
     if (err.status === 404) {
         res.status(404);
         res.render('page-not-found', {
@@ -27,7 +29,7 @@ const notFound = (err, req, res, session) => {
     }
 };
 
-const genericError = (err, req, res, next) => {
+const genericError = (err, req, res) => {
     res.status(err.status || 500);
     const isProduction = process.env.NODE_ENV === 'production';
     res.render('error', {
