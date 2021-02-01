@@ -40,7 +40,7 @@ app.use(express.urlencoded({ extended: false }));
 app.get('/', (_req, res) => res.render('layout', {title: 'Welcome'}));
 
 app.use('/', authRouter);
-app.use('/user', userRouter);
+app.use('/users', userRouter);
 // ROUTES //
 
 // ERRORS

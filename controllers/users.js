@@ -11,7 +11,7 @@ const {
 const userValidators = [
     check('username')
         .exists({ checkFalsy: true })
-        .withMessage('Please provide a value for First Name')
+        .withMessage('Please provide a username')
         .isLength({ max: 100 })
         .withMessage('Username must not be more than 100 characters long'),
     check('emailAddress')
@@ -30,23 +30,20 @@ const userValidators = [
         .withMessage('Password must contain at least 1 lowercase letter, uppercase letter, number, and special character (i.e. "!@#$%^&*")'),
     check('confirmPassword')
         .exists({ checkFalsy: true })
-        .withMessage('Please confirm your password')
-        .isLength({ min: 8, max: 50 })
-        .withMessage('Confirmed password must be between 8 and 50 characters long')
         .custom((value, { req }) => {
             if (value !== req.body.password) {
-                throw new Error('Confirm Password does not match Password');
+                throw new Error('Confirm passwords match');
             }
             return true;
         }),
 ];
 
 const newUser = (req, res) => {
-    const user = db.User.build({});
+    const user = db.Users.build({});
     res.render('new-user', {
         title: 'Register',
         user,
-        csrf: req.csrfToken(),
+        csrfToken: req.csrfToken(),
     });
 }
 
@@ -57,15 +54,19 @@ const createUser = async (req, res) => {
         password,
     } = req.body;
 
-    const user = db.User.build({
+    const user = db.Users.build({
         username,
-        emailAddress,
         password,
+        email: emailAddress,
     });
+
+    console.log(username)
+    console.log(emailAddress)
+    console.log(password)
 
     const validationErrors = validationResult(req);
 
-    if (validatorErrors.isEmpty()) {
+    if (validationErrors.isEmpty()) {
         const hashedPassword = await bcrypt.hash(password, 10);
         user.hashedPassword = hashedPassword;
         await user.save();
@@ -73,7 +74,8 @@ const createUser = async (req, res) => {
         res.redirect('/');
     } else {
         const errors = validationErrors.array().map(err => err.msg);
-        res.render('user-registration', {
+        console.error(errors);
+        res.render('new-user', {
             title: 'Register',
             user,
             errors,
