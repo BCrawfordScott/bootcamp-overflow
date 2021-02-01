@@ -61,10 +61,6 @@ const createUser = async (req, res) => {
         email: emailAddress,
     });
 
-    console.log(username)
-    console.log(emailAddress)
-    console.log(password)
-
     const validationErrors = validationResult(req);
 
     if (validationErrors.isEmpty()) {
@@ -72,7 +68,7 @@ const createUser = async (req, res) => {
         user.hashedPassword = hashedPassword;
         await user.save();
         return loginUser(req, res, user);
-        // res.redirect('/');
+
     } else {
         const errors = validationErrors.array().map(err => err.msg);
         console.error(errors);
