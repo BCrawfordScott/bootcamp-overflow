@@ -6,6 +6,7 @@ const {
     loginUser, 
     csrfProtection,
     asyncHandler,
+    redirectAuth,
 } = require('../util');
 
 const userValidators = [
@@ -70,8 +71,8 @@ const createUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         user.hashedPassword = hashedPassword;
         await user.save();
-        loginUser(req, user);
-        res.redirect('/');
+        return loginUser(req, res, user);
+        // res.redirect('/');
     } else {
         const errors = validationErrors.array().map(err => err.msg);
         console.error(errors);
@@ -85,6 +86,6 @@ const createUser = async (req, res) => {
 } 
 
 module.exports = {
-    createUser: [csrfProtection, ...userValidators, asyncHandler(createUser)],
-    newUser: [csrfProtection, newUser]
+    createUser: [redirectAuth, csrfProtection, ...userValidators, asyncHandler(createUser)],
+    newUser: [redirectAuth, csrfProtection, newUser]
 };

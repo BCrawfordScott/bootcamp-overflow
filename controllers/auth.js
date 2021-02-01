@@ -7,6 +7,7 @@ const {
     logoutUser,
     csrfProtection,
     asyncHandler,
+    redirectAuth,
 } = require('../util');
 
 const newLogin = (req, res) => {
@@ -36,14 +37,13 @@ const userLogin = async (req, res) => {
     const validatorErrors = validationResult(req);
 
     if (validatorErrors.isEmpty()) {
-        const user = await db.User.findOne({ where: { emailAddress } });
+        const user = await db.Users.findOne({ where: { email: emailAddress } });
 
         if (user !== null) {
             const passwordMatch = await bcrypt.compare(password, user.hashedPassword.toString());
 
             if (passwordMatch) {
-                loginUser(req, res, user);
-                return res.redirect('/');
+                return loginUser(req, res, user);
             }
         }
 
@@ -61,13 +61,12 @@ const userLogin = async (req, res) => {
 }
 
 const userLogout = (req, res) => {
-    logoutUser(req);
-    res.redirect('/user/login');
+    return logoutUser(req, res);
 }
 
 module.exports = {
-    newLogin: [csrfProtection, newLogin],
-    loginUser: [csrfProtection, ...loginValidators, asyncHandler(userLogin)],
+    newLogin: [redirectAuth, csrfProtection, newLogin],
+    loginUser: [redirectAuth, csrfProtection, ...loginValidators, asyncHandler(userLogin)],
     logoutUser: userLogout,
 
 }

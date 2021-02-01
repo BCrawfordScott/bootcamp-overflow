@@ -3,7 +3,7 @@ const asyncHandler = (handler) => (req, res, next) => handler(req, res).catch(ne
 // App middleware
 
 const unhandled = (req, res, next) => {
-    const err = new Error("The rdquested page could not be found");
+    const err = new Error("The requested page could not be found");
     err.status = 404;
     next(err);
 }

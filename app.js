@@ -5,7 +5,7 @@ const session = require('express-session');
 const store = require('connect-pg-simple');
 
 const { sessionSecret } = require('./config');
-const { errorHandlers } = require('./util')
+const { errorHandlers, restoreUser } = require('./util')
 const userRouter = require('./routes/user');
 const authRouter = require('./routes/auth');
 
@@ -34,10 +34,11 @@ app.use(session({
     cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 }, // 30 days
 }));
 app.use(express.urlencoded({ extended: false }));
+app.use(restoreUser);
 // CONFIG //
 
 // ROUTES //
-app.get('/', (_req, res) => res.render('layout', {title: 'Welcome'}));
+app.get('/', (_req, res) => {console.log('trying'); return res.render('layout', {title: 'Welcome'}) });
 
 app.use('/', authRouter);
 app.use('/users', userRouter);
