@@ -34,11 +34,12 @@ app.use(session({
     cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 }, // 30 days
 }));
 app.use(express.urlencoded({ extended: false }));
+app.use(express.static('public'));
 app.use(restoreUser);
 // CONFIG //
 
 // ROUTES //
-app.get('/', (_req, res) => {console.log('trying'); return res.render('layout', {title: 'Welcome'}) });
+app.get('/', (_req, res) => {console.log('trying'); return res.render('landing', {title: 'Welcome'}) });
 
 app.use('/', authRouter);
 app.use('/users', userRouter);

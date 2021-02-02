@@ -1,0 +1,11 @@
+extends layout.pug
+
+include utils.pug
+
+block content
+    .container(style="display:flex;justify-content:space-between;")
+        img(src="/images/coding.svg" style="width:100px;")
+        img(src="/images/student.svg" style="width:100px;")
+    h2(class='py-4' style='margin: auto;width: 90%;text-align: center;') Got questions? So do we!
+    h3(class='py-4' style='text-align:center;') Start filling in the gaps 
+        a(href='/login' class='btn btn-sml btn-dark mr-2') here

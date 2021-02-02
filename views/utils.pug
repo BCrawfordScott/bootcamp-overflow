@@ -10,3 +10,11 @@ mixin field(labelText, fieldName, fieldValue, fieldType = 'text')
   div(class='form-group')
     label(for=fieldName)= labelText
     input(type=fieldType id=fieldName name=fieldName value=fieldValue class='form-control')
+
+mixin svg(svg_url, svg_id)
+  if svg_id
+    svg()&attributes(attributes)
+      use(xlink:href= svg_url + '#' + svg_id)
+  else
+    svg()&attributes(attributes)
+      use(xlink:href= svg_url)
