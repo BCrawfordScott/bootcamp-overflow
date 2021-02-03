@@ -80,8 +80,30 @@ const questionCreate = async (req, res) => {
     }
 }
 
+const questionShow = async (req, res) => {
+    const { id } = req.params;
+
+    const question = await db.Questions.findOne({ where: { id }, include: 'author'});
+    
+    if (question) {
+        const { author } = question;
+
+        res.render('questions-show', {
+            title: `Question - ${id}`,
+            question,
+            author,
+        })
+    } else {
+        const err = new Error('Could not find that question');
+        err.status = 404;
+
+        throw err;
+    }
+}
+
 module.exports = {
-    questionIndex: [requireAuth, asyncHandler(questionIndex)],
+    questionIndex: [asyncHandler(questionIndex)],
     questionNew: [requireAuth, csrfProtection, questionNew],
     questionCreate: [requireAuth, csrfProtection, ...questionValidators, asyncHandler(questionCreate)],
+    questionShow: [requireAuth, asyncHandler(questionShow)],
 }
