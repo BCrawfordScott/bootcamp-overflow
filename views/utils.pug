@@ -12,7 +12,7 @@ mixin field(labelText, fieldName, fieldValue, fieldType = 'text')
     input(type=fieldType id=fieldName name=fieldName value=fieldValue class='form-control')
 
 mixin questionsList(questions)
-  ul(class='shadow p-3 mb-4 bg-white rounded list-group')
+  ul(class=' border shadow-lg p-3 my-4 bg-white rounded list-group')
     each q in questions
       li(class='list-group-item')
               span

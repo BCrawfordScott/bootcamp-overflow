@@ -10,7 +10,7 @@ const {
 const router = Router();
 
 router.get('/', questionIndex);
-router.get('/:id', questionShow);
+router.get('/:id(\\d+)/', questionShow);
 router.get('/new', questionNew);
 router.post('/', questionCreate);
 
