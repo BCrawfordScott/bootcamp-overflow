@@ -6,7 +6,8 @@ module.exports = {
       'Questions',
       ['title', 'userId'],
       {
-        indicesType: 'UNIQUE'
+        name: 'deltas_title_userId',
+        unique: true
       }
     )
   },
@@ -14,7 +15,7 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     await queryInterface.removeIndex(
       'Questions',
-      ['title', 'userId'],
+      'deltas_title_userId'
     )
   }
 };

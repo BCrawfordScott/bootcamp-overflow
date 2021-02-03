@@ -3,6 +3,7 @@ extends layout.pug
 include utils.pug
 
 block content
+    +validationErrorSummary(errors)
     h2 Ask your Question
     form(action="/questions" method="POST")
         input(type="hidden" name="_csrf" value=csrfToken)

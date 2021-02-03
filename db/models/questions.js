@@ -24,8 +24,18 @@ module.exports = (sequelize, DataTypes) => {
         title: {
             type: DataTypes.STRING(280),
             allowNull: false,
+        },
+        userId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
         }
     }, {
+        indexes: [
+            {
+               unique: true,
+               fields: ['title', 'userId'] 
+            }
+        ],
         sequelize,
         modelName: 'Questions',
     });

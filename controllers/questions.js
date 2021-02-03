@@ -26,20 +26,23 @@ const questionNew = (req, res) => {
     })
 };
 
-const quetionValidators = [
+const questionValidators = [
     check('title')
         .exists({ checkFalsy: true })
         .withMessage('Please provide a title')
         .isLength({ max: 280 })
         .withMessage('Title cannot exceed 280 characters')
         .custom(async (value, { req }) => {
+            console.log('custom check')
             const { userId } = req.session.auth;
             const repeats = await db.Questions.findAll({ where: { userId, title: value}})
-            if (!repeats.isEmpty()) {
+            if (repeats.length > 0) {
+                console.log('Should reject')
                 throw new Error('You have already submitted a question with this title');
             }
             return true;
-        }),
+        })
+        .withMessage('You have already submitted a question with this title'),
     check('body')
         .exists({ checkFalsy: true })
         .withMessage('Please provide a question body')
@@ -67,11 +70,12 @@ const questionCreate = async (req, res) => {
         res.redirect('/questions');
     } else {
         const errors = validationErrors.array().map(err => err.msg);
-
+        console.log(errors);
         res.render('questions-new', {
             title: 'New Question',
             errors,
-            question
+            question,
+            csrfToken: req.csrfToken(),
         })
     }
 }
@@ -79,5 +83,5 @@ const questionCreate = async (req, res) => {
 module.exports = {
     questionIndex: [requireAuth, asyncHandler(questionIndex)],
     questionNew: [requireAuth, csrfProtection, questionNew],
-    questionCreate: [requireAuth, csrfProtection, asyncHandler(questionCreate)],
+    questionCreate: [requireAuth, csrfProtection, ...questionValidators, asyncHandler(questionCreate)],
 }
