@@ -6,8 +6,10 @@ const store = require('connect-pg-simple');
 
 const { sessionSecret } = require('./config');
 const { errorHandlers, restoreUser } = require('./util')
+const landingRouter = require('./routes/landing');
 const userRouter = require('./routes/user');
 const authRouter = require('./routes/auth');
+const questionRouter = require('./routes/question');
 
 const app = express();
 
@@ -39,10 +41,11 @@ app.use(restoreUser);
 // CONFIG //
 
 // ROUTES //
-app.get('/', (_req, res) => {console.log('trying'); return res.render('landing', {title: 'Welcome'}) });
+app.get('/', landingRouter);
 
 app.use('/', authRouter);
 app.use('/users', userRouter);
+app.use('/questions', questionRouter);
 // ROUTES //
 
 // ERRORS

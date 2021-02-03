@@ -1,0 +1,13 @@
+extends layout.pug
+
+include utils.pug
+
+block content
+    h2 Ask your Question
+    form(action="/questions" method="POST")
+        input(type="hidden" name="_csrf" value=csrfToken)
+        +field("title", "title", question.title)
+        div(class='form-group')
+            label(for='body') Body
+            textarea(id='body' name='body' value=`${question.body}` class='form-control')
+        input(class='btn btn-primary' type='submit' value='Submit')

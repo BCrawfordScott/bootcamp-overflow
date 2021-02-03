@@ -11,10 +11,11 @@ mixin field(labelText, fieldName, fieldValue, fieldType = 'text')
     label(for=fieldName)= labelText
     input(type=fieldType id=fieldName name=fieldName value=fieldValue class='form-control')
 
-mixin svg(svg_url, svg_id)
-  if svg_id
-    svg()&attributes(attributes)
-      use(xlink:href= svg_url + '#' + svg_id)
-  else
-    svg()&attributes(attributes)
-      use(xlink:href= svg_url)
+mixin questionsList(questions)
+  ul(class='shadow p-3 mb-4 bg-white rounded list-group')
+    each q in questions
+      li(class='list-group-item')
+              span
+                  a(href=`/questions/${q.id}`)
+                      h4= q.title
+                  .small(style='color:lightgray;')= q.createdAt

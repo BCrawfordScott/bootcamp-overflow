@@ -1,0 +1,9 @@
+extends layout
+
+include utils.pug
+
+block content
+    .container(class='d-flex justify-content-between mb-3')
+        h2 Most Recent Questions
+        a(href='/questions/new' class='btn btn-lg btn-warning mr-2') Ask a question
+    +questionsList(questions)

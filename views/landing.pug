@@ -8,4 +8,9 @@ block content
         img(src="/images/student.svg" style="width:100px;")
     h2(class='py-4' style='margin: auto;width: 90%;text-align: center;') Got questions? So do we!
     h3(class='py-4' style='text-align:center;') Start filling in the gaps 
-        a(href='/login' class='btn btn-sml btn-dark mr-2') here
+        a(href='/questions' class='btn btn-sml btn-warning mr-2') here
+
+    div(class='mt-5 pt-5 d-flex flex-column align-items-center border-top border-warning')
+        h2(class='py-4') Here's what people are asking:
+        +questionsList(questions)
+        a(href='/login' class='mb-5 btn btn-sml btn-primary mr-2') Find more!
