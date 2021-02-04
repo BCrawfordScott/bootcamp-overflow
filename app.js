@@ -13,6 +13,19 @@ const questionRouter = require('./routes/question');
 
 const app = express();
 
+// Define the connection string for connect-pg-simple - the "store"
+let dbURL;
+
+if (process.env.NODE_ENV === 'production') {
+    dbURL = process.env.DATABASE_URL;
+} else {
+        /*
+            connection string is built by following the syntax:
+            postgres://USERNAME:PASSWORD@HOST_NAME:PORT/DB_NAME
+        */
+    dbURL = `postgres://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:5432/${process.env.DB_DATABASE}`;
+}
+
 // CONFIG //
 app.set('view engine', 'pug');
 
@@ -21,12 +34,8 @@ app.use(express.json());
 app.use(cookieParser(sessionSecret));
 app.use(session({
     store: new(store(session))(
-        {
-            /*
-            connection string is built by following the syntax:
-            postgres://USERNAME:PASSWORD@HOST_NAME:PORT/DB_NAME
-            */
-            conString: `postgres://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:5432/${process.env.DB_DATABASE}`
+        {  
+            conString: dbURL,
         }
     ),
     name: 'bootcamp-overflow.sid',
