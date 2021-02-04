@@ -1,8 +1,0 @@
- id |                                                                body                                                                | userId |         createdAt          |         updatedAt          |                   title                    
-----+------------------------------------------------------------------------------------------------------------------------------------+--------+----------------------------+----------------------------+--------------------------------------------
-  2 | I'm struggling with finding a really good example to teach closure in Javascript.  What is the best way to exemplify the concepts? |      1 | 2021-02-02 19:29:31.119-05 | 2021-02-02 19:29:31.119-05 | What's a good way to teach closure?
-  3 | I'm struggling with finding a really good example to teach closure in Javascript.  What is the best way to exemplify the concepts? |      1 | 2021-02-02 19:31:35.959-05 | 2021-02-02 19:31:35.959-05 | What's a good way to teach closure?
-  4 | Every time I try to log into progress tracker it gives me a weird error message.  What gives?                                      |      2 | 2021-02-02 19:31:35.963-05 | 2021-02-02 19:31:35.963-05 | Why can't I log in?
-  5 | It seems like let and var do the exact same thing.  What is the difference between them?                                           |      2 | 2021-02-02 19:31:35.963-05 | 2021-02-02 19:31:35.963-05 | What's the difference between let and var?
-(4 rows)
-
