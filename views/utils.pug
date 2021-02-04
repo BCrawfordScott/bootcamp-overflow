@@ -19,3 +19,14 @@ mixin questionsList(questions)
                   a(href=`/questions/${q.id}`)
                       h4= q.title
                   .small(style='color:lightgray;')= q.createdAt
+
+mixin questionForm(isEdit)
+  +validationErrorSummary(errors)
+  h2 Ask your Question
+  form(action=`/questions${isEdit ? `/${question.id}` : ""}` method="POST")
+      input(type="hidden" name="_csrf" value=csrfToken)
+      +field("Title", "title", question.title)
+      div(class='form-group')
+          label(for='body') Body
+          textarea(id='body' name='body' class='form-control')= question.body
+      input(class='btn btn-primary my-2' type='submit' value='Submit')

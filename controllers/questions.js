@@ -6,6 +6,7 @@ const {
     csrfProtection,
     asyncHandler,
     requireAuth,
+    requireAuthor,
 } = require('../util');
 
 const questionIndex = async (_req, res) => {
@@ -33,16 +34,14 @@ const questionValidators = [
         .isLength({ max: 280 })
         .withMessage('Title cannot exceed 280 characters')
         .custom(async (value, { req }) => {
-            console.log('custom check')
             const { userId } = req.session.auth;
-            const repeats = await db.Questions.findAll({ where: { userId, title: value}})
-            if (repeats.length > 0) {
-                console.log('Should reject')
+            const repeat = await db.Questions.findOne({ where: { userId, title: value}})
+
+            if (repeat && repeat.id != req.params.id) {
                 throw new Error('You have already submitted a question with this title');
             }
             return true;
-        })
-        .withMessage('You have already submitted a question with this title'),
+        }),
     check('body')
         .exists({ checkFalsy: true })
         .withMessage('Please provide a question body')
@@ -82,6 +81,7 @@ const questionCreate = async (req, res) => {
 
 const questionShow = async (req, res) => {
     const { id } = req.params;
+    const { userId } = req.session.auth;
 
     const question = await db.Questions.findOne({ where: { id }, include: 'author'});
     
@@ -92,6 +92,7 @@ const questionShow = async (req, res) => {
             title: `Question - ${id}`,
             question,
             author,
+            isAuthor: author.id === userId,
         })
     } else {
         const err = new Error('Could not find that question');
@@ -101,9 +102,63 @@ const questionShow = async (req, res) => {
     }
 }
 
+// requireAuthor will provide the question via res.locals
+const questionEdit = async (req, res) => {
+    const { id } = req.params;
+    const { question } = res.locals;
+
+    if (question) {
+        res.render('questions-edit', {
+            title: `Edit Question - ${id}`,
+            question,
+            csrfToken: req.csrfToken(),
+        })
+    } else {
+        res.redirect('/questions');
+    }
+}
+
+// requireAuthor will provide the question via res.locals
+const questionUpdate = async (req, res) => {
+    const { id } = req.params;
+    const {
+        title: newTitle,
+        body: newBody
+    } = req.body;
+
+    const validationErrors = validationResult(req);
+    const { question } = res.locals
+    if(question && validationErrors.isEmpty()) {
+        question.title = newTitle;
+        question.body = newBody;
+
+        await question.save();
+
+        res.redirect(`/questions/${id}`);
+    } else if (question) {
+        const errors = validationErrors.array().map(err => err.msg);
+
+        res.render(`questions-edit`, {
+            title: `Edit Question - ${id}`,
+            question,
+            errors,
+            csrfToken: req.csrfToken(), 
+        })
+    } else {
+        const err = new Error('Could not find that question');
+        err.status = 404;
+
+        throw err;
+    }
+
+
+}
+
 module.exports = {
     questionIndex: [asyncHandler(questionIndex)],
     questionNew: [requireAuth, csrfProtection, questionNew],
     questionCreate: [requireAuth, csrfProtection, ...questionValidators, asyncHandler(questionCreate)],
     questionShow: [requireAuth, asyncHandler(questionShow)],
+    questionEdit: [requireAuth, requireAuthor, csrfProtection, asyncHandler(questionEdit)],
+    questionUpdate: [requireAuth, requireAuthor, csrfProtection, ...questionValidators, asyncHandler(questionUpdate)]
 }

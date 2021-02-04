@@ -3,8 +3,15 @@ extends layout.pug
 include utils.pug
 
 block content
-    h1(class='display-5')= question.title
+    .containter(class='d-flex flex-row justify-content-between')
+        h1(class='display-6')= question.title
+        
     p(class='small' style='color:lightgray;')= question.createdAt
-    figcaption(class="blockquote-footer")= author.username
+    figcaption(class="blockquote-footer my-2")= author.username
     br
-    p(class="fs-6 shadow p-3 mb-5 bg-white rounded")= question.body
+    p(class="shadow p-3 bg-white rounded")= question.body
+    if isAuthor
+        .conatiner(class='d-flex justify-content-between')
+            a(class='btn btn-sm btn-warning' href=`/questions/${question.id}/edit`) Edit
+            a(class='btn btn-sm btn-danger' href='') Delete   
+    a(class='btn btn-sm btn-primary my-4' href='/questions') Back
