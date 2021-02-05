@@ -13,5 +13,7 @@ block content
     if isAuthor
         .conatiner(class='d-flex justify-content-between')
             a(class='btn btn-sm btn-warning' href=`/questions/${question.id}/edit`) Edit
-            a(class='btn btn-sm btn-danger' href='') Delete   
+            form(action=`questions/${question.id}/delete` method='POST')
+                input(class='btn btn-sm btn-danger' type='submit' value='Delete')   
+    
     a(class='btn btn-sm btn-primary my-4' href='/questions') Back
