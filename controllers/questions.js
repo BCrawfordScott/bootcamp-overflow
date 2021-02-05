@@ -1,7 +1,6 @@
 const { check, validationResult } = require('express-validator');
-const { sequelize } = require('../db/models');
-
 const db = require('../db/models');
+
 const {
     csrfProtection,
     asyncHandler,
@@ -11,7 +10,11 @@ const {
 } = require('../util');
 
 const questionIndex = async (_req, res) => {
-    const questions = await db.Questions.findAll({ order: [['createdAt', 'DESC']], limit: 25 });
+    const questions = await db.Questions.findAll({ 
+        order: [['createdAt', 'DESC']], 
+        limit: 25,
+        include: 'answers'
+     });
     res.render('questions-index', {
         title: 'Questions',
         questions,
@@ -67,7 +70,7 @@ const questionCreate = async (req, res) => {
 
     if(validationErrors.isEmpty()) {
         await question.save();
-        res.redirect('/questions');
+        res.redirect(`/questions/${question.id}`);
     } else {
         const errors = validationErrors.array().map(err => err.msg);
         console.log(errors);

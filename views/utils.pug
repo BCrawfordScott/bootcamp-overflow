@@ -18,6 +18,9 @@ mixin questionsList(questions)
               span
                   a(href=`/questions/${q.id}`)
                       h4= q.title
+                  .small= `Answers: ${q.answers.length}`
+                      if (q.answers.length === 0 && user && user.role === 'instructor') 
+                          em(class='small mx-1') Be the first to answer!
                   .small(style='color:lightgray;')= q.createdAt
 
 mixin questionForm(isEdit)

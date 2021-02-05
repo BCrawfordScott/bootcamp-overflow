@@ -5,7 +5,12 @@ const { Questions } = require('../db/models')
 const router = Router();
 
 router.get('/', async (_req, res) => { 
-    const questions = await Questions.findAll({ order: [['createdAt', 'DESC']], limit: 10});
+    const questions = await Questions.findAll({ 
+        order: [['createdAt', 'DESC']], 
+        limit: 10,
+        include: 'answers'
+    });
+
     res.render('landing', {
         title: 'Welcome',
         questions,
