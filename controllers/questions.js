@@ -7,6 +7,7 @@ const {
     asyncHandler,
     requireAuth,
     requireAuthor,
+    checkQuestionPermissions,
 } = require('../util');
 
 const questionIndex = async (_req, res) => {
@@ -93,6 +94,7 @@ const questionShow = async (req, res) => {
             question,
             author,
             isAuthor: author.id === userId,
+            csrfToken: req.csrfToken(),
         })
     } else {
         const err = new Error('Could not find that question');
@@ -106,7 +108,7 @@ const questionShow = async (req, res) => {
 const questionEdit = async (req, res) => {
     const { id } = req.params;
     const { question } = res.locals;
-
+    
     if (question) {
         res.render('questions-edit', {
             title: `Edit Question - ${id}`,
@@ -121,6 +123,7 @@ const questionEdit = async (req, res) => {
 // requireAuthor will provide the question via res.locals
 const questionUpdate = async (req, res) => {
     const { id } = req.params;
+    const { userId } = req.session.auth;
     const {
         title: newTitle,
         body: newBody
@@ -129,6 +132,8 @@ const questionUpdate = async (req, res) => {
     const validationErrors = validationResult(req);
     const { question } = res.locals
     if(question && validationErrors.isEmpty()) {
+        checkQuestionPermissions(id, userId);
+        
         question.title = newTitle;
         question.body = newBody;
 
@@ -150,15 +155,35 @@ const questionUpdate = async (req, res) => {
 
         throw err;
     }
+}
 
+const questionDestroy = async (req, res) => {
+    const { question } = res.locals;
+    const { userId } = req.session.auth;
 
+    if(question) {
+        checkQuestionPermissions(question.userId, userId);
+        const { title: qTitle } = question;
+        
+        await question.destroy();
+
+        res.render('question-delete', {
+            title: 'Question Deleted',
+            qTitle,
+        })
+    } else {
+        const err = new Error('Illegal operation. Unable to process');
+        err.status = 403;
+        throw err;
+    }
 }
 
 module.exports = {
     questionIndex: [asyncHandler(questionIndex)],
     questionNew: [requireAuth, csrfProtection, questionNew],
     questionCreate: [requireAuth, csrfProtection, ...questionValidators, asyncHandler(questionCreate)],
-    questionShow: [requireAuth, asyncHandler(questionShow)],
+    questionShow: [requireAuth, csrfProtection, asyncHandler(questionShow)],
     questionEdit: [requireAuth, requireAuthor, csrfProtection, asyncHandler(questionEdit)],
-    questionUpdate: [requireAuth, requireAuthor, csrfProtection, ...questionValidators, asyncHandler(questionUpdate)]
+    questionUpdate: [requireAuth, requireAuthor, csrfProtection, ...questionValidators, asyncHandler(questionUpdate)],
+    questionDestroy: [requireAuth, requireAuthor, csrfProtection, asyncHandler(questionDestroy)],
 }

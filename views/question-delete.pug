@@ -1,0 +1,8 @@
+extends layout.pug
+
+block content
+
+    div(class='d-flex flex-column align-items-center')
+        h2 Successfully deleted
+        h3= `"${qTitle}"`
+        a(class='btn btn-primary my-2' href='/questions') Return to questions

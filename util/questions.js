@@ -15,6 +15,16 @@ const requireAuthor = async(req, res, next) => {
     }
 }
 
+const checkQuestionPermissions = (questionAuthorId, currentUserId) => {
+    if (questionAuthorId !== currentUserId) {
+        const err = new Error('Illegal operation.');
+        err.status = 403;
+        throw err;
+    }
+};
+
+
 module.exports = {
     requireAuthor,
+    checkQuestionPermissions,
 }
