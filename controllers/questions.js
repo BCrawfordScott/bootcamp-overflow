@@ -87,15 +87,34 @@ const questionShow = async (req, res) => {
     const { id } = req.params;
     const { userId } = req.session.auth;
 
-    const question = await db.Questions.findOne({ where: { id }, include: 'author'});
+    const question = await db.Questions.findOne({ 
+        where: { id }, 
+        include: [ 
+            {
+                model: db.Users,
+                as: 'author'
+            }, 
+            {
+                model: db.Answers,
+                as: 'answers',
+                include: {
+                    model: db.Users,
+                    as: 'instructor',
+                }
+            }
+        ],
+    });
+
+    console.log(question)
     
     if (question) {
-        const { author } = question;
+        const { author, answers } = question;
 
         res.render('questions-show', {
             title: `Question - ${id}`,
             question,
             author,
+            answers,
             isAuthor: author.id === userId,
             csrfToken: req.csrfToken(),
         })

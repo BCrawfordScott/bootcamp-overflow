@@ -33,3 +33,12 @@ mixin questionForm(isEdit)
           label(for='body') Body
           textarea(id='body' name='body' class='form-control')= question.body
       input(class='btn btn-primary my-2' type='submit' value='Submit')
+
+mixin answersList(answers)
+  if(answers.length > 0)
+    ul(class=' shadow-lg p-3 my-4 bg-white rounded list-group list-group-flush')
+      each a in answers
+        li(class='list-group-item')
+          p= a.body 
+          figcaption(class="blockquote-footer my-2")= a.instructor.username
+          .small(style='color:lightgray;')= a.createdAt

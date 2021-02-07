@@ -3,8 +3,7 @@ extends layout.pug
 include utils.pug
 
 block content
-    .containter(class='d-flex flex-row justify-content-between')
-        h1(class='display-6')= question.title
+    h1(class='display-6')= question.title
         
     p(class='small' style='color:lightgray;')= question.createdAt
     figcaption(class="blockquote-footer my-2")= author.username
@@ -14,8 +13,11 @@ block content
         .conatiner(class='d-flex justify-content-between')
             a(class='btn btn-sm btn-warning py-2' href=`/questions/${question.id}/edit`) Edit
             button(type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal") Delete
-                
-
+    br          
+    h3(class='border-top border-warning pt-4')= `${answers.length} Answers:`
+    +answersList(answers)
+    
+    
     div(class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true")
         div(class="modal-dialog")
             div(class="modal-content")
