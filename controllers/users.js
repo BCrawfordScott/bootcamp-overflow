@@ -7,6 +7,8 @@ const {
     csrfProtection,
     asyncHandler,
     redirectAuth,
+    requireAuth,
+    requireInstructor,
 } = require('../util');
 
 const userValidators = [
@@ -81,7 +83,25 @@ const createUser = async (req, res) => {
     }
 } 
 
+const userShow = async (req, res) => {
+    const { id } = req.params;
+    console.log('In the user show')
+    const showUser = await db.Users.findByPk(parseInt(id));
+
+    if (showUser) { 
+        res.render('user-show', {
+            title: `User - ${id}`,
+            showUser,
+        });
+    } else {
+        const err = new Error('No such user');
+        err.status = 404;
+        throw err;
+    }
+}
+
 module.exports = {
     createUser: [redirectAuth, csrfProtection, ...userValidators, asyncHandler(createUser)],
-    newUser: [redirectAuth, csrfProtection, newUser]
+    newUser: [redirectAuth, csrfProtection, newUser],
+    userShow: [requireAuth, requireInstructor, asyncHandler(userShow)],
 };

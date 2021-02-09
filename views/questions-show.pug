@@ -6,7 +6,8 @@ block content
     h1(class='display-6')= question.title
         
     p(class='small' style='color:lightgray;')= question.createdAt
-    figcaption(class="blockquote-footer my-2")= author.username
+    figcaption(class="blockquote-footer my-2")
+        a(href=`/users/${author.id}`)= author.username
     br
     p(class="shadow p-3 bg-white rounded")= question.body
     if isAuthor

@@ -46,7 +46,8 @@ mixin answersList(answers, userId)
                 em.small(style='color:red;') You Answered
               button(class='btn btn-sml btn-warning' type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne") Edit
           p(class='pt-2')= a.body 
-          figcaption(class="blockquote-footer my-2")= a.instructor.username
+          figcaption(class="blockquote-footer my-2")
+            a(href=`/users/${a.instructor.id}`)= a.instructor.username
           .small(style='color:lightgray;')= a.createdAt
           if a.instructorId === userId
           div(class="accordion" id="accordionExample")
