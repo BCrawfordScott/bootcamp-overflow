@@ -15,7 +15,7 @@ block content
             button(type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal") Delete
     br          
     h3(class='border-top border-warning pt-4')= `${answers.length} Answers:`
-    +answersList(answers)
+    +answersList(answers, user.id)
     if (user.isInstructor() && !answered)
         +newAnswerForm(question.id, newAnswer)
     

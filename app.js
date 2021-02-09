@@ -10,6 +10,7 @@ const landingRouter = require('./routes/landing');
 const userRouter = require('./routes/user');
 const authRouter = require('./routes/auth');
 const questionRouter = require('./routes/question');
+const answerRouter = require('./routes/answer');
 
 const app = express();
 
@@ -55,6 +56,7 @@ app.get('/', landingRouter);
 app.use('/', authRouter);
 app.use('/users', userRouter);
 app.use('/questions', questionRouter);
+app.use('/answers', answerRouter);
 // ROUTES //
 
 // ERRORS

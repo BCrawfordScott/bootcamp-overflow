@@ -40,19 +40,21 @@ mixin answersList(answers, userId)
       each a in answers
         li(class='list-group-item')
           if a.instructorId === userId
-          span(class='d-flex justify-content-between')
-            p
-              <i class="bi bi-star-fill" style='color:red;'> </i>
-              em.small(style='color:red;') You Answered
-            button(class='btn btn-sml btn-warning' type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne") Edit
+            span(class='d-flex justify-content-between')
+              p
+                <i class="bi bi-star-fill" style='color:red;'> </i>
+                em.small(style='color:red;') You Answered
+              button(class='btn btn-sml btn-warning' type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne") Edit
           p= a.body 
           figcaption(class="blockquote-footer my-2")= a.instructor.username
           .small(style='color:lightgray;')= a.createdAt
           if a.instructorId === userId
           div(class="accordion" id="accordionExample")
             div(class="accordion-item")
-              div(id="collapseOne" class=" collapse mt-3" aria-labelledby="headingOne" data-bs-parent="#accordionExample")
-                div 
+              div(id="collapseOne" class=`collapse mt-3 ${errors ? 'show' : ''}` aria-labelledby="headingOne" data-bs-parent="#accordionExample")
+                div
+                  if (errors) 
+                    +validationErrorSummary(errors)
                   span(class='d-flex justify-content-between')
                     h4 Edit your answer
                     button(type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAnswerModal") Delete
@@ -72,7 +74,7 @@ mixin answersList(answers, userId)
                 
                         div(class="modal-footer")
                             button(type="button" class="btn btn-secondary" data-bs-dismiss="modal") Cancel
-                            form(action=`/answer/${a.id}/delete` method='POST')
+                            form(action=`/answers/${a.id}/delete` method='POST')
                                 input(type='hidden' name='_csrf' value=csrfToken)
                                 input(type="submit" class="btn btn-danger" value='Delete')
 
