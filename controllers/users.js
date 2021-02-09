@@ -86,12 +86,38 @@ const createUser = async (req, res) => {
 const userShow = async (req, res) => {
     const { id } = req.params;
     console.log('In the user show')
-    const showUser = await db.Users.findByPk(parseInt(id));
+    const showUser = await db.Users.findOne({
+        where: {
+            id
+        },
+        include: [
+            {
+                model: db.Questions,
+                as: 'questions',
+                include: {
+                    model: db.Answers,
+                    as: 'answers',
+                }
+            },
+            {
+                model: db.Answers,
+                as: 'answers',
+                include: {
+                    model: db.Questions,
+                    as: 'question',
+                },
+            }
+        ]
+    });
 
     if (showUser) { 
+        const { questions, answers } = showUser;
+        
         res.render('user-show', {
             title: `User - ${id}`,
             showUser,
+            questions,
+            answers,
         });
     } else {
         const err = new Error('No such user');

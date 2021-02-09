@@ -19,7 +19,7 @@ mixin questionsList(questions)
                   a(href=`/questions/${q.id}`)
                       h4= q.title
                   .small= `Answers: ${q.answers.length}`
-                      if (q.answers.length === 0 && user && user.role === 'instructor') 
+                      if (user.id !== q.userId && q.answers.length === 0 && user && user.role === 'instructor') 
                           em(class='small mx-1') Be the first to answer!
                   .small(style='color:lightgray;')= q.createdAt
 
@@ -88,3 +88,30 @@ mixin newAnswerForm(qId, answer)
           label(for='body') Body
           textarea(id='body' name='body' class='form-control')= answer.body
       input(class='btn btn-primary my-2' type='submit' value='Submit')
+
+mixin userContributions(questions, answers)
+  div(class="accordion" id="accordionExample")
+    div(class="accordion-item")
+      h2(class="accordion-header" id="headingOne")
+        button(class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne") Questions
+      div(id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample")
+        div(class="accordion-body") 
+          +questionsList(questions)
+    if (answers.length > 0)
+      div(class="accordion-item")
+        h2(class="accordion-header" id="headingTwo")
+          button(class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo") Answers
+        div(id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample")
+          div(class="accordion-body") 
+            ul(class=' border shadow-lg p-3 my-4 bg-white rounded list-group')
+              each a in answers
+                li(class='list-group-item')
+                        span
+                            a(href=`/questions/${a.question.id}`)
+                                h4= a.question.title
+                            span
+                              <i class="bi bi-star-fill" style='color:red;'> </i>
+                              em.small(style='color:red;') Answer
+                            p(class='mt-2')= a.body
+                            .small(style='color:lightgray;')= a.updatedAt
+
