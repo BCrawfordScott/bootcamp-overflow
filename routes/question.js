@@ -10,6 +10,10 @@ const {
     questionDestroy,
 } = require('../controllers/questions');
 
+const {
+    answerCreate,
+} = require('../controllers/answers');
+
 const router = Router();
 
 router.get('/', questionIndex);
@@ -19,5 +23,6 @@ router.get('/:id(\\d+)/edit', questionEdit);
 router.post('/', questionCreate);
 router.post('/:id(\\d+)', questionUpdate);
 router.post('/:id(\\d+)/delete', questionDestroy);
+router.post('/:id/answers', answerCreate)
 
 module.exports = router;

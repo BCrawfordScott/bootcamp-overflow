@@ -34,11 +34,54 @@ mixin questionForm(isEdit)
           textarea(id='body' name='body' class='form-control')= question.body
       input(class='btn btn-primary my-2' type='submit' value='Submit')
 
-mixin answersList(answers)
+mixin answersList(answers, userId)
   if(answers.length > 0)
     ul(class=' shadow-lg p-3 my-4 bg-white rounded list-group list-group-flush')
       each a in answers
         li(class='list-group-item')
+          if a.instructorId === userId
+          span(class='d-flex justify-content-between')
+            p
+              <i class="bi bi-star-fill" style='color:red;'> </i>
+              em.small(style='color:red;') You Answered
+            button(class='btn btn-sml btn-warning' type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne") Edit
           p= a.body 
           figcaption(class="blockquote-footer my-2")= a.instructor.username
           .small(style='color:lightgray;')= a.createdAt
+          if a.instructorId === userId
+          div(class="accordion" id="accordionExample")
+            div(class="accordion-item")
+              div(id="collapseOne" class=" collapse mt-3" aria-labelledby="headingOne" data-bs-parent="#accordionExample")
+                div 
+                  span(class='d-flex justify-content-between')
+                    h4 Edit your answer
+                    button(type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAnswerModal") Delete
+                  form(action=`/answers/${a.id}` method="POST")
+                      input(type="hidden" name="_csrf" value=csrfToken)
+                      div(class='form-group')
+                          label(for='body') Body
+                          textarea(id='body' name='body' class='form-control')= a.body
+                      input(class='btn btn-primary my-2' type='submit' value='Submit')
+          div(class="modal fade" id="deleteAnswerModal" tabindex="-1" aria-labelledby="deleteAnswerModalLabel" aria-hidden="true")
+                div(class="modal-dialog")
+                    div(class="modal-content")
+                        div(class="modal-header")
+                            h5(class="modal-title" id="deleteAnswerModalLabel") Delete Answer
+                            button(type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close")
+                        div(class="modal-body") Are you sure you want to delete this Answer?
+                
+                        div(class="modal-footer")
+                            button(type="button" class="btn btn-secondary" data-bs-dismiss="modal") Cancel
+                            form(action=`/answer/${a.id}/delete` method='POST')
+                                input(type='hidden' name='_csrf' value=csrfToken)
+                                input(type="submit" class="btn btn-danger" value='Delete')
+
+mixin newAnswerForm(qId, answer)
+  +validationErrorSummary(errors)
+  h2 Provide an answer
+  form(action=`/questions/${qId}/answers` method="POST")
+      input(type="hidden" name="_csrf" value=csrfToken)
+      div(class='form-group')
+          label(for='body') Body
+          textarea(id='body' name='body' class='form-control')= answer.body
+      input(class='btn btn-primary my-2' type='submit' value='Submit')

@@ -104,17 +104,18 @@ const questionShow = async (req, res) => {
             }
         ],
     });
-
-    console.log(question)
     
     if (question) {
         const { author, answers } = question;
-
+        const answered = await db.Answers.findOne({ where: { instructorId: userId, questionId: id }});
+        
         res.render('questions-show', {
             title: `Question - ${id}`,
             question,
             author,
             answers,
+            answered,
+            newAnswer: db.Answers.build(),
             isAuthor: author.id === userId,
             csrfToken: req.csrfToken(),
         })

@@ -16,6 +16,8 @@ block content
     br          
     h3(class='border-top border-warning pt-4')= `${answers.length} Answers:`
     +answersList(answers)
+    if (user.isInstructor() && !answered)
+        +newAnswerForm(question.id, newAnswer)
     
     
     div(class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true")
