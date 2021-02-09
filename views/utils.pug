@@ -19,7 +19,7 @@ mixin questionsList(questions)
                   a(href=`/questions/${q.id}`)
                       h4= q.title
                   .small= `Answers: ${q.answers.length}`
-                      if (user.id !== q.userId && q.answers.length === 0 && user && user.role === 'instructor') 
+                      if (user && user.role === 'instructor' && user.id !== q.userId && q.answers.length === 0) 
                           em(class='small mx-1') Be the first to answer!
                   .small(style='color:lightgray;')= q.createdAt
 

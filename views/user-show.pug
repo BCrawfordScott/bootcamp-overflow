@@ -3,7 +3,11 @@ extends layout
 include utils
 
 block content
-    h1= showUser.username
+    span(class='d-flex justify-content-between')
+        h1= showUser.username
+         span(class='lead px-3')= `${showUser.role.toUpperCase()}`
+            if (user.isInstructor())
+                button(class='btn btn-warning mx-3') Change Role
     h3(class='my-4') Contributions
     +userContributions(questions, answers)
     a(class='btn btn-sml btn-primary mt-5' href='/questions') Back

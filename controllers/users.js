@@ -129,5 +129,5 @@ const userShow = async (req, res) => {
 module.exports = {
     createUser: [redirectAuth, csrfProtection, ...userValidators, asyncHandler(createUser)],
     newUser: [redirectAuth, csrfProtection, newUser],
-    userShow: [requireAuth, requireInstructor, asyncHandler(userShow)],
+    userShow: [requireAuth, asyncHandler(userShow)],
 };
