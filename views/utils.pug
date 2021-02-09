@@ -45,7 +45,7 @@ mixin answersList(answers, userId)
                 <i class="bi bi-star-fill" style='color:red;'> </i>
                 em.small(style='color:red;') You Answered
               button(class='btn btn-sml btn-warning' type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne") Edit
-          p= a.body 
+          p(class='pt-2')= a.body 
           figcaption(class="blockquote-footer my-2")= a.instructor.username
           .small(style='color:lightgray;')= a.createdAt
           if a.instructorId === userId
