@@ -118,6 +118,7 @@ const userShow = async (req, res) => {
             showUser,
             questions,
             answers,
+            csrfToken: req.csrfToken(),
         });
     } else {
         const err = new Error('No such user');
@@ -126,8 +127,13 @@ const userShow = async (req, res) => {
     }
 }
 
+const userChangeRole = (req, res) => {
+    return res.json({message: 'Bully for you'});
+}
+
 module.exports = {
     createUser: [redirectAuth, csrfProtection, ...userValidators, asyncHandler(createUser)],
     newUser: [redirectAuth, csrfProtection, newUser],
-    userShow: [requireAuth, asyncHandler(userShow)],
+    userShow: [requireAuth, csrfProtection, asyncHandler(userShow)],
+    userChangeRole: [requireAuth, csrfProtection, userChangeRole]
 };

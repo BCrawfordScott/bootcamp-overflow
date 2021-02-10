@@ -3,11 +3,21 @@ extends layout
 include utils
 
 block content
+    input(type='hidden' id='csrfToken' data-token=csrfToken)
     span(class='d-flex justify-content-between')
         h1= showUser.username
          span(class='lead px-3')= `${showUser.role.toUpperCase()}`
             if (user.isInstructor())
-                button(class='btn btn-warning mx-3') Change Role
+                button(class="btn btn-warning mx-3" type="button" data-bs-toggle="collapse" data-bs-target="#roleCollapse" aria-expanded="false" aria-controls="roleCollapse") Change Role
+                div(class="collapse pt-1" id="roleCollapse")
+                    div(class="card card-body")
+                        div(class="btn-group" role="group" aria-label="Basic example")
+                            button(type="button" class=`btn btn-outline-warning ${showUser.role === 'student' ? 'active' : 'not-active'}` data-use="roleChange" data-target="student") Student
+                            button(type="button" class=`btn btn-outline-warning ${showUser.role === 'instructor' ? 'active' : 'not-active'}` data-use="roleChange" data-target="instructor") Instructor
+
+                            
     h3(class='my-4') Contributions
     +userContributions(questions, answers)
     a(class='btn btn-sml btn-primary mt-5' href='/questions') Back
+    script(src="/javascript/index.js")
+    

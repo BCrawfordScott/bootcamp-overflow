@@ -12,6 +12,7 @@ const authRouter = require('./routes/auth');
 const questionRouter = require('./routes/question');
 const answerRouter = require('./routes/answer');
 const instructorRouter = require('./routes/instructor');
+const apiRouter = require('./routes/api');
 
 const app = express();
 
@@ -59,6 +60,8 @@ app.use('/users', userRouter);
 app.use('/questions', questionRouter);
 app.use('/answers', answerRouter);
 app.use('/instructor', instructorRouter);
+
+app.use('/api', apiRouter);
 // ROUTES //
 
 // ERRORS
