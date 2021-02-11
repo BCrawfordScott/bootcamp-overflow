@@ -128,7 +128,8 @@ const userShow = async (req, res) => {
 }
 
 const userChangeRole = (req, res) => {
-    return res.json({message: 'Bully for you'});
+    // return res.json({message: 'Bully for you'});
+    return res.json({newRole: req.body.role});
 }
 
 module.exports = {
