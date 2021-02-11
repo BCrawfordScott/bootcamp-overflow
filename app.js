@@ -28,6 +28,10 @@ if (process.env.NODE_ENV === 'production') {
         */
     dbURL = `postgres://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:5432/${process.env.DB_DATABASE}`;
 }
+const corsApproved = [
+    // 'https://bcamp-overflow.herokuapp.com',
+    // 'localhost:8080',
+];
 
 // CONFIG //
 app.set('view engine', 'pug');

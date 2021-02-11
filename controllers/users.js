@@ -127,14 +127,25 @@ const userShow = async (req, res) => {
     }
 }
 
-const userChangeRole = (req, res) => {
-    // return res.json({message: 'Bully for you'});
-    return res.json({newRole: req.body.role});
+const userChangeRole = async (req, res) => {
+    const { id } = req.params;
+    const user = await db.Users.findByPk(id);
+
+    if (user) {
+       const { role } = req.body;
+       user.role = role;
+       await user.save();
+       return res.json({newRole: user.role});
+    } else {
+        res.status(404);
+        res.json("No such user!")
+    }
+
 }
 
 module.exports = {
     createUser: [redirectAuth, csrfProtection, ...userValidators, asyncHandler(createUser)],
     newUser: [redirectAuth, csrfProtection, newUser],
     userShow: [requireAuth, csrfProtection, asyncHandler(userShow)],
-    userChangeRole: [requireAuth, csrfProtection, userChangeRole]
+    userChangeRole: [requireAuth, requireInstructor, csrfProtection, asyncHandler(userChangeRole)],
 };
