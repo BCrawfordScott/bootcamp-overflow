@@ -60,6 +60,7 @@ async function changeRole(newRole) {
 
         setupRoleSelector();
     } else {
+        loading.classList.add('visually-hidden')
         const alert = document.getElementById('alert')
         alert.innerText = "Unable to change role"
         alert.classList.add('alert-danger');
@@ -72,6 +73,8 @@ async function changeRole(newRole) {
                 alert.classList.remove('alert-danger');
             }, 1000);
         }, 5000);
+
+        setupRoleSelector();
     }
 } 
 
