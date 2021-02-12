@@ -44,27 +44,27 @@ mixin answersList(answers, userId)
               p
                 <i class="bi bi-star-fill" style='color:red;'> </i>
                 em.small(style='color:red;') You Answered
-              button(class='btn btn-sml btn-warning' type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne") Edit
+              button(class='btn btn-sml btn-warning' type="button" data-bs-toggle="collapse" data-bs-target=`#collapse${a.id}` aria-expanded="true" aria-controls=`collapse${a.id}`) Edit
           p(class='pt-2')= a.body 
           figcaption(class="blockquote-footer my-2")
             a(href=`/users/${a.instructor.id}`)= a.instructor.username
           .small(style='color:lightgray;')= a.createdAt
           if a.instructorId === userId
-          div(class="accordion" id="accordionExample")
-            div(class="accordion-item")
-              div(id="collapseOne" class=`collapse mt-3 ${errors ? 'show' : ''}` aria-labelledby="headingOne" data-bs-parent="#accordionExample")
-                div
-                  if (errors) 
-                    +validationErrorSummary(errors)
-                  span(class='d-flex justify-content-between')
-                    h4 Edit your answer
-                    button(type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAnswerModal") Delete
-                  form(action=`/answers/${a.id}` method="POST")
-                      input(type="hidden" name="_csrf" value=csrfToken)
-                      div(class='form-group')
-                          label(for='body') Body
-                          textarea(id='body' name='body' class='form-control')= a.body
-                      input(class='btn btn-primary my-2' type='submit' value='Submit')
+            div(class="accordion" id="accordionExample")
+              div(class="accordion-item")
+                div(id=`collapse${a.id}` class=`collapse mt-3 ${errors ? 'show' : ''}` aria-labelledby="headingOne" data-bs-parent="#accordionExample")
+                  div
+                    if (errors) 
+                      +validationErrorSummary(errors)
+                    span(class='d-flex justify-content-between')
+                      h4 Edit your answer
+                      button(type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAnswerModal") Delete
+                    form(action=`/answers/${a.id}` method="POST")
+                        input(type="hidden" name="_csrf" value=csrfToken)
+                        div(class='form-group')
+                            label(for='body') Body
+                            textarea(id='body' name='body' class='form-control')= a.body
+                        input(class='btn btn-primary my-2' type='submit' value='Submit')
           div(class="modal fade" id="deleteAnswerModal" tabindex="-1" aria-labelledby="deleteAnswerModalLabel" aria-hidden="true")
                 div(class="modal-dialog")
                     div(class="modal-content")
