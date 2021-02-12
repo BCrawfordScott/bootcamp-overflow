@@ -9,11 +9,13 @@ block content
          span(class='lead px-3')= `${showUser.role.toUpperCase()}`
             if (user.isInstructor())
                 button(class="btn btn-warning mx-3" type="button" data-bs-toggle="collapse" data-bs-target="#roleCollapse" aria-expanded="false" aria-controls="roleCollapse") Change Role
+                div(class="spinner-grow spinner-grow-sm text-warning visually-hidden position-absolute" role="status" id='loading-spinner')
                 div(class="collapse pt-1" id="roleCollapse")
                     div(class="card card-body")
                         div(class="btn-group" role="group" aria-label="Basic example")
                             button(type="button" class=`btn btn-outline-warning ${showUser.role === 'student' ? 'active' : 'not-active'}` aria-label="roleChange" aria-id="student" data-role="student") Student
                             button(type="button" class=`btn btn-outline-warning ${showUser.role === 'instructor' ? 'active' : 'not-active'}` aria-label="roleChange" aria-id="instructor" data-role="instructor") Instructor
+                    div(class="alert visually-hidden position-fixed" role="alert" id='alert') ...
 
                             
     h3(class='my-4') Contributions

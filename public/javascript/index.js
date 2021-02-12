@@ -29,6 +29,8 @@ async function reqRoleChange(newRole) {
 async function changeRole(newRole) {
     const buttons = Array.from(document.querySelectorAll('[aria-label="roleChange"]'));
     buttons.forEach(btn => btn.removeEventListener('click', handleChangeRole));
+    const loading = document.getElementById('loading-spinner');
+    loading.classList.remove('visually-hidden');
     
     const response = await reqRoleChange(newRole)
 
@@ -39,11 +41,37 @@ async function changeRole(newRole) {
         oldButton.classList.add('not-active');
         const newButton = document.querySelector(`[aria-id="${newRole}"]`);
         newButton.classList.add('active');
+        const title = document.querySelector('span.lead');
+        title.childNodes[0].nodeValue = `${newRole.toUpperCase()}`
+        loading.classList.add('visually-hidden')
+
+        const alert = document.getElementById('alert')
+        alert.innerText = "Role successfully changed"
+        alert.classList.add('alert-warning');
+        alert.classList.remove('visually-hidden');
+        setTimeout(() => {
+            alert.classList.add('fade');
+            setTimeout(() => {
+                alert.classList.add('visually-hidden');
+                alert.classList.remove('fade');
+                alert.classList.remove('alert-warning');
+            }, 1000);
+        }, 5000);
 
         setupRoleSelector();
     } else {
-
-        console.log("Not ok", response);
+        const alert = document.getElementById('alert')
+        alert.innerText = "Unable to change role"
+        alert.classList.add('alert-danger');
+        alert.classList.remove('visually-hidden');
+        setTimeout(() => {
+            alert.classList.add('fade');
+            setTimeout(() => {
+                alert.classList.add('visually-hidden');
+                alert.classList.remove('fade');
+                alert.classList.remove('alert-danger');
+            }, 1000);
+        }, 5000);
     }
 } 
 

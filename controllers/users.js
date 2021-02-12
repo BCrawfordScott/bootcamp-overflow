@@ -130,7 +130,7 @@ const userShow = async (req, res) => {
 const userChangeRole = async (req, res) => {
     const { id } = req.params;
     const user = await db.Users.findByPk(id);
-
+    await new Promise(resolve => setTimeout(resolve, 5000));
     if (user) {
        const { role } = req.body;
        user.role = role;
