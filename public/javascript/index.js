@@ -45,9 +45,6 @@ async function changeRole(newRole) {
 
         console.log("Not ok", response);
     }
-        // const data = await response.json();
-
-
 } 
 
 function handleChangeRole (e) {
